@@ -49,11 +49,24 @@ class InworldMicrophone {
     }
 
     async check() {
-        await this.refreshDevices();
-        await this.refreshDevices();
-        setInterval(() => {
-            this.permissionStatusHandler(this);
-        }, 1000);
+        // await this.refreshDevices();
+        // await this.refreshDevices();
+        // setInterval(() => {
+        //     this.permissionStatusHandler(this);
+        // }, 1000);
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then((stream) => {
+                console.log('Success');
+                document.microphoneNative.unityCommand("PermissionChanged", true);
+                alert('Success');
+            })
+            .catch((err) => {
+                console.error('Error: ', err);
+                alert('Error', err);
+            });
+
+        // await navigator.mediaDevices.getUserMedia({ audio: true });
     }
 
     getDeviceCaps() {
