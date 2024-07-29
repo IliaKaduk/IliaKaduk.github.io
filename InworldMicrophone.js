@@ -54,19 +54,8 @@ class InworldMicrophone {
         // setInterval(() => {
         //     this.permissionStatusHandler(this);
         // }, 1000);
-
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then((stream) => {
-                console.log('Success');
-                document.microphoneNative.unityCommand("PermissionChanged", true);
-                alert('Success');
-            })
-            .catch((err) => {
-                console.error('Error: ', err);
-                alert('Error', err);
-            });
-
-        // await navigator.mediaDevices.getUserMedia({ audio: true });
+        await this.refreshDevices();
+        this.permissionStatusHandler(this);
     }
 
     getDeviceCaps() {
@@ -216,7 +205,7 @@ class InworldMicrophone {
     }
 
     async permissionStatusHandler(instance) {
-        await instance.refreshDevices();
+        // await instance.refreshDevices();
         let permitted = instance.devicePermitted(instance.deviceKinds.AudioInput);
         if (instance.permissionGranted !== permitted) {
             instance.setPermissionStatus(permitted);
