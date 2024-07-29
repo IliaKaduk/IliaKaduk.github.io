@@ -33,7 +33,7 @@ class InworldMicrophone {
                 instance.check();
 
                 // here
-                console.error('check in delayedInitialize(instance)');
+                alert('check in delayedInitialize(instance)');
             }, 100);
         };
         canvas.addEventListener("touchstart", handler);
@@ -60,7 +60,7 @@ class InworldMicrophone {
         // }, 1000);
 
         // here
-        console.error('refreshDevices and get access in check()');
+        alert('refreshDevices and get access in check()');
         await this.refreshDevices();
         this.permissionStatusHandler(this);
     }
@@ -104,7 +104,7 @@ class InworldMicrophone {
             };
 
             // here
-            console.error('get access in start(deviceId, sampleRate, loop, duration)');
+            alert('get access in start(deviceId, sampleRate, loop, duration)');
 
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(stream => {
