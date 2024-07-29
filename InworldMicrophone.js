@@ -27,9 +27,13 @@ class InworldMicrophone {
         handler = () => {
             canvas.removeEventListener("touchstart", handler);
             canvas.removeEventListener("mousedown", handler);
+
             setTimeout(() => {
                 instance.initialize(instance);
                 instance.check();
+
+                // here
+                console.error('check in delayedInitialize(instance)');
             }, 100);
         };
         canvas.addEventListener("touchstart", handler);
@@ -54,6 +58,9 @@ class InworldMicrophone {
         // setInterval(() => {
         //     this.permissionStatusHandler(this);
         // }, 1000);
+
+        // here
+        console.error('refreshDevices and get access in check()');
         await this.refreshDevices();
         this.permissionStatusHandler(this);
     }
@@ -95,6 +102,10 @@ class InworldMicrophone {
             } : {
                 audio: true
             };
+
+            // here
+            console.error('get access in start(deviceId, sampleRate, loop, duration)');
+
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(stream => {
                     this.mediaGranted(this, stream);
