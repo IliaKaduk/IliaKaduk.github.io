@@ -27,13 +27,9 @@ class InworldMicrophone {
         handler = () => {
             canvas.removeEventListener("touchstart", handler);
             canvas.removeEventListener("mousedown", handler);
-
             setTimeout(() => {
                 instance.initialize(instance);
                 instance.check();
-
-                // here
-                alert('check in delayedInitialize(instance)');
             }, 100);
         };
         canvas.addEventListener("touchstart", handler);
@@ -53,16 +49,11 @@ class InworldMicrophone {
     }
 
     async check() {
-        // await this.refreshDevices();
-        // await this.refreshDevices();
-        // setInterval(() => {
-        //     this.permissionStatusHandler(this);
-        // }, 1000);
-
-        // here
-        alert('refreshDevices and get access in check()');
         await this.refreshDevices();
-        this.permissionStatusHandler(this);
+        await this.refreshDevices();
+        setInterval(() => {
+            this.permissionStatusHandler(this);
+        }, 1000);
     }
 
     getDeviceCaps() {
@@ -102,10 +93,6 @@ class InworldMicrophone {
             } : {
                 audio: true
             };
-
-            // here
-            alert('get access in start(deviceId, sampleRate, loop, duration)');
-
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(stream => {
                     this.mediaGranted(this, stream);
@@ -216,7 +203,7 @@ class InworldMicrophone {
     }
 
     async permissionStatusHandler(instance) {
-        // await instance.refreshDevices();
+        await instance.refreshDevices();
         let permitted = instance.devicePermitted(instance.deviceKinds.AudioInput);
         if (instance.permissionGranted !== permitted) {
             instance.setPermissionStatus(permitted);
