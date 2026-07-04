@@ -1,109 +1,609 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Plya: Spicy chat</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="manifest" href="manifest.webmanifest">
-  
-<script src='./InworldMicrophone.js'></script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ilya Kaduk — Senior Python Backend Developer</title>
+<meta name="description" content="Ilya Kaduk — Senior Python Backend Developer. FastAPI, Django, PostgreSQL. 8+ years building products in EdTech, Web3, AI and e-commerce.">
+<style>
+  :root{
+    --bg: #0a0e14;
+    --bg-alt: #0e131b;
+    --surface: #121826;
+    --surface-2: #161e2e;
+    --border: #232c3d;
+    --text: #e7ecf3;
+    --text-dim: #97a3b8;
+    --text-faint: #5c6883;
+    --accent: #5eead4;
+    --accent-2: #a78bfa;
+    --accent-3: #ffd43b;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --maxw: 1080px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 15% -10%, rgba(94,234,212,0.08), transparent 60%),
+                radial-gradient(1000px 500px at 90% 10%, rgba(167,139,250,0.08), transparent 55%),
+                var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; }
+
+  ::selection { background: rgba(94,234,212,0.25); color: var(--text); }
+
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    position: fixed; top:0; left:0; right:0; z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(10,14,20,0.7);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner{
+    max-width: var(--maxw); margin:0 auto; padding: 0 24px;
+    height: 64px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo{
+    font-family: var(--mono); font-weight:700; font-size:1.05rem; letter-spacing:0.5px;
+    color: var(--text); text-decoration:none; display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{ color: var(--accent); }
+  nav.links{ display:flex; gap: 28px; }
+  nav.links a{
+    font-size: 0.92rem; text-decoration:none; color: var(--text-dim);
+    position:relative; padding: 4px 0; transition: color .2s ease;
+  }
+  nav.links a:hover, nav.links a.active{ color: var(--text); }
+  nav.links a.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 2px;
+  }
+  .nav-cta{
+    display:flex; align-items:center; gap:14px;
+  }
+  .btn-ghost{
+    font-family: var(--mono); font-size: 0.82rem; color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px;
+    text-decoration:none; transition: all .2s ease; white-space:nowrap;
+  }
+  .btn-ghost:hover{ border-color: var(--accent); color: var(--accent); }
+
+  .menu-btn{
+    display:none; background:none; border:none; color: var(--text); cursor:pointer;
+    width:36px; height:36px; align-items:center; justify-content:center;
+  }
+  .menu-btn span, .menu-btn span::before, .menu-btn span::after{
+    content:""; display:block; width:20px; height:2px; background: var(--text);
+    position:relative; transition: transform .2s ease, opacity .2s ease;
+  }
+  .menu-btn span::before{ position:absolute; top:-6px; }
+  .menu-btn span::after{ position:absolute; top:6px; }
+
+  /* ---------- Hero ---------- */
+  section.hero{
+    min-height: 100vh; display:flex; align-items:center; position:relative;
+    padding-top: 100px; padding-bottom: 60px;
+  }
+  .hero-grid{
+    position:absolute; inset:0; z-index:-1; opacity:0.35;
+    background-image:
+      linear-gradient(rgba(94,234,212,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94,234,212,0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(700px 400px at 30% 20%, black, transparent 75%);
+  }
+  .eyebrow{
+    font-family: var(--mono); color: var(--accent); font-size: 0.88rem;
+    display:flex; align-items:center; gap:10px; margin-bottom: 20px;
+  }
+  .eyebrow .bar{ width: 28px; height:1px; background: var(--accent); display:inline-block; }
+  h1.name{
+    font-size: clamp(2.4rem, 6vw, 4.2rem); line-height:1.05; margin: 0 0 14px;
+    font-weight: 800; letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #fff 30%, var(--accent) 70%, var(--accent-2) 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+  .role-line{
+    font-family: var(--mono); font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+    color: var(--text-dim); margin-bottom: 28px; min-height: 1.6em;
+    display:flex; align-items:center; gap:2px;
+  }
+  .role-line .cursor{
+    display:inline-block; width:2px; height:1.1em; background: var(--accent);
+    margin-left:4px; animation: blink 1s step-start infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  p.lede{
+    max-width: 640px; color: var(--text-dim); font-size: 1.05rem; margin-bottom: 36px;
+  }
+  p.lede strong{ color: var(--text); font-weight:600; }
+
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-bottom: 48px; }
+  .btn-primary{
+    font-family: var(--mono); font-weight:600; font-size:0.92rem;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    color: #06110f; padding: 13px 24px; border-radius:10px; text-decoration:none;
+    box-shadow: 0 8px 24px -8px rgba(94,234,212,0.5);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(94,234,212,0.6); }
+  .btn-secondary{
+    font-family: var(--mono); font-weight:600; font-size:0.92rem;
+    border: 1px solid var(--border); color: var(--text); padding: 13px 24px;
+    border-radius:10px; text-decoration:none; transition: all .2s ease;
+  }
+  .btn-secondary:hover{ border-color: var(--accent-2); color: var(--accent-2); }
+
+  .hero-stats{ display:flex; gap: 40px; flex-wrap:wrap; }
+  .stat b{
+    display:block; font-size: 1.7rem; font-weight:800;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .stat span{ font-size: 0.85rem; color: var(--text-faint); }
+
+  /* ---------- Section shared ---------- */
+  section{ padding: 110px 0; position:relative; }
+  .section-head{ margin-bottom: 56px; }
+  .section-tag{
+    font-family: var(--mono); color: var(--accent-2); font-size: 0.82rem;
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display:block;
+  }
+  h2.section-title{ font-size: clamp(1.7rem, 3.4vw, 2.4rem); margin: 0; font-weight: 800; letter-spacing: -0.01em; }
+
+  .reveal{ opacity:0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items:start; }
+  .about-text p{ color: var(--text-dim); margin-bottom: 18px; font-size:1.02rem; }
+  .about-text strong{ color: var(--text); }
+  .focus-card{
+    background: var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding: 26px; margin-top:8px;
+  }
+  .focus-card h3{ margin:0 0 14px; font-size:0.95rem; font-family: var(--mono); color: var(--accent); }
+  .focus-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .focus-list li{ display:flex; gap:10px; align-items:flex-start; color: var(--text-dim); font-size:0.94rem; }
+  .focus-list li::before{ content:"▸"; color: var(--accent-2); flex-shrink:0; }
+
+  /* ---------- Experience timeline ---------- */
+  .timeline{ position:relative; padding-left: 32px; }
+  .timeline::before{
+    content:""; position:absolute; left:6px; top:6px; bottom:6px; width:2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2), transparent);
+  }
+  .job{ position:relative; padding-bottom: 46px; }
+  .job:last-child{ padding-bottom:0; }
+  .job::before{
+    content:""; position:absolute; left:-32px; top:4px; width:12px; height:12px;
+    border-radius:50%; background: var(--bg); border:2px solid var(--accent);
+  }
+  .job-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; margin-bottom:6px; }
+  .job-role{ font-size:1.15rem; font-weight:700; }
+  .job-dates{ font-family: var(--mono); font-size:0.82rem; color: var(--text-faint); margin-left:auto; }
+  .job-company{ color: var(--accent-2); font-size:0.95rem; margin-bottom:10px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .job-company a{ color: var(--accent-2); text-decoration:none; border-bottom: 1px dotted rgba(167,139,250,0.4); }
+  .job-company a:hover{ color: var(--accent); border-color: var(--accent); }
+  .job-loc{ color: var(--text-faint); font-size:0.85rem; }
+  .job-desc{ color: var(--text-dim); font-size:0.96rem; margin: 0 0 14px; max-width: 680px; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-family: var(--mono); font-size:0.76rem; color: var(--text-dim);
+    background: var(--surface-2); border:1px solid var(--border); border-radius:6px;
+    padding: 4px 10px;
+  }
+
+  /* ---------- Projects ---------- */
+  .project-card{
+    background: var(--surface); border:1px solid var(--border); border-radius:16px;
+    padding: 34px; display:grid; grid-template-columns: auto 1fr; gap: 28px;
+    position:relative; overflow:hidden;
+  }
+  .project-card::before{
+    content:""; position:absolute; inset:0; opacity:0.5; pointer-events:none;
+    background: radial-gradient(500px 250px at 100% 0%, rgba(94,234,212,0.08), transparent 60%);
+  }
+  .project-icon{
+    width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, rgba(94,234,212,0.15), rgba(167,139,250,0.15));
+    border:1px solid var(--border); font-family: var(--mono); font-weight:800; color: var(--accent);
+  }
+  .project-body h3{ margin:0 0 4px; font-size:1.3rem; }
+  .project-link{ font-family: var(--mono); font-size:0.8rem; color: var(--text-faint); text-decoration:none; }
+  .project-link:hover{ color: var(--accent); }
+  .project-body p{ color: var(--text-dim); margin: 14px 0 18px; max-width: 640px; }
+
+  /* ---------- Skills ---------- */
+  .skills-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 24px; }
+  .skill-card{ background: var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; }
+  .skill-card h4{ margin:0 0 14px; font-family: var(--mono); font-size:0.85rem; color: var(--accent-3); text-transform:uppercase; letter-spacing:1px; }
+  .skill-card .tag-row .tag{ background: var(--surface-2); }
+
+  /* ---------- Education / Contact ---------- */
+  .split{ display:grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .edu-card{ background: var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; }
+  .edu-card h3{ margin:0 0 6px; font-size:1.1rem; }
+  .edu-card span{ color: var(--text-faint); font-family: var(--mono); font-size:0.85rem; }
+
+  footer{
+    border-top:1px solid var(--border); padding: 70px 0 40px; text-align:center;
+  }
+  footer h2{ font-size: clamp(1.6rem,4vw,2.4rem); margin:0 0 16px; font-weight:800; }
+  footer p{ color: var(--text-dim); margin-bottom: 32px; }
+  .footer-links{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom: 48px; }
+  .foot-meta{ color: var(--text-faint); font-size:0.85rem; font-family: var(--mono); }
+
+  @media (max-width: 860px){
+    nav.links{ display:none; }
+    .menu-btn{ display:flex; }
+    .about-grid, .split{ grid-template-columns: 1fr; }
+    .project-card{ grid-template-columns: 1fr; }
+    .hero-stats{ gap: 28px; }
+    section{ padding: 80px 0; }
+  }
+
+  nav.links.mobile-open{
+    display:flex; flex-direction:column; position:absolute; top:64px; left:0; right:0;
+    background: rgba(10,14,20,0.98); border-bottom:1px solid var(--border); padding: 20px 24px; gap:18px;
+  }
+</style>
 </head>
-  <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+<body>
+
+<header class="nav">
+  <div class="nav-inner wrap" style="padding-left:0;padding-right:0;">
+    <a href="#top" class="logo">ilya<span class="dot">.</span>kaduk</a>
+    <nav class="links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn-ghost" href="mailto:iliakadukdev@gmail.com">Say hello</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <div class="hero-grid"></div>
+    <div class="wrap">
+      <div class="eyebrow"><span class="bar"></span> Senior Python Backend Developer</div>
+      <h1 class="name">Ilya Kaduk</h1>
+      <div class="role-line"><span id="typedRole">FastAPI &amp; Django backend engineer</span><span class="cursor"></span></div>
+      <p class="lede">
+        8+ years turning <strong>business requirements</strong> into working products —
+        across <strong>EdTech</strong>, <strong>Web3</strong>, <strong>AI gaming</strong> and
+        <strong>e-commerce</strong>. I've shipped as a backend developer, tech lead, and founder.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="mailto:iliakadukdev@gmail.com">Get in touch</a>
+        <a class="btn-secondary" href="https://linkedin.com/in/ilya-kaduk-dev" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn-secondary" href="#experience">View experience</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>8+</b><span>years experience</span></div>
+        <div class="stat"><b>7</b><span>companies &amp; products</span></div>
+        <div class="stat"><b>4</b><span>industries shipped in</span></div>
+        <div class="stat"><b>1</b><span>founder journey</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-tag">About</span>
+        <h2 class="section-title">Backend engineer who ships products, not just endpoints</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>I'm a <strong>Senior Python Backend Developer</strong> based in Tbilisi, Georgia, with
+          8+ years of experience designing and building systems from the ground up — including an
+          accounting platform, an AI game backend with mental-health analytics, and an NFT project
+          I founded myself.</p>
+          <p>My stack centers on <strong>FastAPI</strong>, <strong>Django REST Framework</strong>,
+          and <strong>PostgreSQL</strong>, backed by <strong>Celery/RabbitMQ</strong> for async work,
+          <strong>Elasticsearch</strong> and <strong>ClickHouse</strong> for search and analytics, and
+          <strong>Docker</strong> for shipping it all reliably.</p>
+          <p>I've worked as an individual contributor, a <strong>Tech Lead</strong> translating business
+          requirements into sprints and reviewing deliverables across design, web and mobile, and as a
+          <strong>Founder</strong> building a product end-to-end, smart contract included.</p>
+        </div>
+        <div class="focus-card reveal">
+          <h3>// what I bring</h3>
+          <ul class="focus-list">
+            <li>Designing systems from scratch — schemas, architecture, deployment</li>
+            <li>Turning ambiguous business requirements into shipped features</li>
+            <li>Async, event-driven backends: Celery, RabbitMQ, WebSockets</li>
+            <li>Search &amp; analytics at scale: Elasticsearch, ClickHouse</li>
+            <li>Tech leadership: sprint planning, code review, cross-team delivery</li>
+          </ul>
         </div>
       </div>
-      <div id="unity-warning"> </div>
     </div>
+  </section>
 
-    <div style="display: none;">Container 1</div>
-    
-    <script>
-      window.addEventListener("load", function () {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("ServiceWorker.js");
-        }
-      });
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-tag">Experience</span>
+        <h2 class="section-title">Where I've built things</h2>
+      </div>
+      <div class="timeline">
 
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var warningBanner = document.querySelector("#unity-warning");
+        <div class="job reveal">
+          <div class="job-head"><span class="job-role">Python Backend Developer</span><span class="job-dates">Feb 2025 — May 2026</span></div>
+          <div class="job-company"><a href="https://deinconsultant.de" target="_blank" rel="noopener">DeinConsultant GmbH</a><span class="job-loc">· Remote · E-commerce</span></div>
+          <p class="job-desc">Designed and built an accounting platform from scratch — workspaces with
+          access control, full-text document search on Elasticsearch, and external calendar and payment
+          integrations. As Tech Lead, translated business requirements into use cases, planned sprints,
+          and reviewed design, web, and mobile deliverables.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">SQLAlchemy</span>
+            <span class="tag">PostgreSQL</span><span class="tag">Celery</span><span class="tag">RabbitMQ</span><span class="tag">Elasticsearch</span>
+          </div>
+        </div>
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
+        <div class="job reveal">
+          <div class="job-head"><span class="job-role">Python Backend Developer</span><span class="job-dates">May 2023 — Feb 2025</span></div>
+          <div class="job-company"><a href="https://www.linkedin.com/company/aitransmedia" target="_blank" rel="noopener">Transmedia</a><span class="job-loc">· Remote · AI gaming</span></div>
+          <p class="job-desc">Built the backend for an AI game with mental-health analysis: OpenAI
+          integration, game event analytics on ClickHouse, and a Unity SDK. Shipped two Telegram Mini
+          Apps with Unity Analytics and payment processing. Integrated elizaOS with X and DEX Screener,
+          and set up the YouTube API for an AI streamer.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">aiogram</span>
+            <span class="tag">Django REST Framework</span><span class="tag">PostgreSQL</span><span class="tag">ClickHouse</span>
+            <span class="tag">Docker</span><span class="tag">OpenAI API</span>
+          </div>
+        </div>
+
+        <div class="job reveal">
+          <div class="job-head"><span class="job-role">Python Backend Developer · Founder</span><span class="job-dates">Jan 2022 — Apr 2023</span></div>
+          <div class="job-company"><a href="https://wax.atomichub.io/explorer/collection/wax-mainnet/mrpotatogame" target="_blank" rel="noopener">Medium Rare Potato</a><span class="job-loc">· Remote · Web3 / NFT gaming</span></div>
+          <p class="job-desc">Founded and built an NFT project from scratch at the intersection of
+          blockchain, gaming, and NFTs — including a smart contract with pricing logic and per-wallet
+          limits, plus ongoing code review.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">Django REST Framework</span>
+            <span class="tag">PostgreSQL</span><span class="tag">Redis</span>
+          </div>
+        </div>
+
+        <div class="job reveal">
+          <div class="job-head"><span class="job-role">Python Backend Developer</span><span class="job-dates">Aug 2020 — Dec 2021</span></div>
+          <div class="job-company"><a href="https://deinconsultant.de" target="_blank" rel="noopener">DeinConsultant GmbH</a><span class="job-loc">· Remote · EdTech / AI</span></div>
+          <p class="job-desc">Built a school and student platform from scratch. On the AI side,
+          developed a licensing service and improved application performance by resolving N+1 queries
+          and refactoring critical parts of the codebase.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">Django REST Framework</span><span class="tag">Flask</span>
+            <span class="tag">SQLAlchemy</span><span class="tag">PostgreSQL</span><span class="tag">MongoDB</span>
+            <span class="tag">Celery</span><span class="tag">RabbitMQ</span><span class="tag">Docker</span>
+          </div>
+        </div>
+
+        <div class="job reveal">
+          <div class="job-head"><span class="job-role">Python Backend Developer</span><span class="job-dates">Nov 2018 — Jul 2020</span></div>
+          <div class="job-company">KorallMicro<span class="job-loc">· Rostov-on-Don · E-commerce</span></div>
+          <p class="job-desc">Developed new features and wrote tests for the product management
+          system of an online store spanning a dealer network and physical retail locations across
+          multiple cities.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">Django</span><span class="tag">Django REST Framework</span>
+            <span class="tag">unittest</span><span class="tag">PostgreSQL</span><span class="tag">Celery</span><span class="tag">RabbitMQ</span>
+          </div>
+        </div>
+
+        <div class="job reveal">
+          <div class="job-head"><span class="job-role">Python Backend Developer</span><span class="job-dates">Jul 2017 — Oct 2018</span></div>
+          <div class="job-company"><a href="https://inpk.ru" target="_blank" rel="noopener">INPK</a><span class="job-loc">· Bataysk · Real estate &amp; petroleum</span></div>
+          <p class="job-desc">Contributed to an apartment booking system, a cottage village personal
+          account, and a real-time petroleum procurement auction built on WebSockets.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">Django REST Framework</span>
+            <span class="tag">PostgreSQL</span><span class="tag">WebSocket</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-tag">Featured Project</span>
+        <h2 class="section-title">Something I built for myself</h2>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-icon">MRP</div>
+        <div class="project-body">
+          <h3>MRP</h3>
+          <a class="project-link" href="https://gitlab.com/ilia-kaduk-fastapi/mrp" target="_blank" rel="noopener">gitlab.com/ilia-kaduk-fastapi/mrp ↗</a>
+          <p>A REST API built with FastAPI and async SQLAlchemy: JWT auth with refresh tokens,
+          row-level locking for concurrent transactions, an extensible permission system, a layered
+          architecture with domain separation, a full async test suite, and a complete Docker
+          deployment stack.</p>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">SQLAlchemy</span>
+            <span class="tag">PostgreSQL</span><span class="tag">Docker</span><span class="tag">JWT</span>
+            <span class="tag">pytest</span><span class="tag">Alembic</span><span class="tag">Nginx</span><span class="tag">Pydantic</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-tag">Skills</span>
+        <h2 class="section-title">Tools of the trade</h2>
+      </div>
+      <div class="skills-grid reveal">
+        <div class="skill-card">
+          <h4>Languages &amp; Frameworks</h4>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Django REST Framework</span>
+            <span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">Pydantic</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>Data &amp; Storage</h4>
+          <div class="tag-row">
+            <span class="tag">PostgreSQL</span><span class="tag">MongoDB</span><span class="tag">Redis</span>
+            <span class="tag">Elasticsearch</span><span class="tag">ClickHouse</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>Infra &amp; Messaging</h4>
+          <div class="tag-row">
+            <span class="tag">Docker</span><span class="tag">Celery</span><span class="tag">RabbitMQ</span>
+            <span class="tag">Nginx</span><span class="tag">WebSocket</span><span class="tag">CI/CD</span><span class="tag">Linux</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>Practice &amp; Leadership</h4>
+          <div class="tag-row">
+            <span class="tag">Software Architecture</span><span class="tag">Technical Leadership</span>
+            <span class="tag">Code Review</span><span class="tag">pytest</span><span class="tag">JWT</span><span class="tag">Git</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="section-tag">Education</span>
+        <h2 class="section-title">Where it started</h2>
+      </div>
+      <div class="split">
+        <div class="edu-card reveal">
+          <h3>Python Development</h3>
+          <span>Yandex Academy · 2016</span>
+        </div>
+        <div class="edu-card reveal">
+          <h3>Based in Tbilisi, Georgia</h3>
+          <span>Open to remote &amp; relocation-friendly roles</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap reveal">
+    <span class="section-tag">Contact</span>
+    <h2>Let's build something reliable.</h2>
+    <p>Open to Senior/Lead Python Backend roles &amp; ambitious products.</p>
+    <div class="footer-links">
+      <a class="btn-primary" href="mailto:iliakadukdev@gmail.com">iliakadukdev@gmail.com</a>
+      <a class="btn-secondary" href="https://linkedin.com/in/ilya-kaduk-dev" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn-secondary" href="https://gitlab.com/ilia-kaduk-fastapi/mrp" target="_blank" rel="noopener">GitLab ↗</a>
+    </div>
+    <div class="foot-meta">Ilya Kaduk · Tbilisi, Georgia · © <span id="year"></span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Mobile menu toggle
+  var menuBtn = document.getElementById('menuBtn');
+  var navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', function(){
+    navLinks.classList.toggle('mobile-open');
+  });
+  navLinks.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ navLinks.classList.remove('mobile-open'); });
+  });
+
+  // Scroll-spy active link
+  var sections = ['about','experience','projects','skills','contact'].map(function(id){
+    return document.getElementById(id);
+  }).filter(Boolean);
+  var navAnchors = Array.prototype.slice.call(navLinks.querySelectorAll('a'));
+  function onScroll(){
+    var y = window.scrollY + 120;
+    var current = null;
+    sections.forEach(function(sec){
+      if (sec.offsetTop <= y) current = sec.id;
+    });
+    navAnchors.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // Reveal on scroll
+  var revealEls = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
       }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(function(el){ io.observe(el); });
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/IliaKaduk.github.io.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/IliaKaduk.github.io.data",
-        frameworkUrl: buildUrl + "/IliaKaduk.github.io.framework.js",
-        codeUrl: buildUrl + "/IliaKaduk.github.io.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "PlayLife",
-        productName: "Plya: Spicy chat",
-        productVersion: "12",
-        showBanner: unityShowBanner,
-      };
+  // Typed role rotation
+  var roles = [
+    'FastAPI & Django backend engineer',
+    'Building products in EdTech, Web3 & AI',
+    'Backend Developer · Tech Lead · Founder',
+    'Turning requirements into shipped code'
+  ];
+  var el = document.getElementById('typedRole');
+  var ri = 0, ci = 0, deleting = false;
 
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
+  function tick(){
+    var full = roles[ri];
+    if (!deleting){
+      ci++;
+      el.textContent = full.slice(0, ci);
+      if (ci === full.length){
+        deleting = true;
+        setTimeout(tick, 1700);
+        return;
       }
+    } else {
+      ci--;
+      el.textContent = full.slice(0, ci);
+      if (ci === 0){
+        deleting = false;
+        ri = (ri + 1) % roles.length;
+      }
+    }
+    setTimeout(tick, deleting ? 28 : 45);
+  }
+  setTimeout(tick, 900);
 
-      canvas.style.background = "url('" + buildUrl + "/IliaKaduk.github.io.jpg') center / cover";
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
-    </script>
-  </body>
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
 </html>
